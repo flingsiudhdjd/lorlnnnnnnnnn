@@ -10,7 +10,7 @@ local plr = Players.LocalPlayer
 local playerGui = plr:WaitForChild("PlayerGui")
 
 -- Premium Check
-local GAME_PASS_ID = 1608444260
+local GAME_PASS_ID = 160844426
 local isPremiumUser = false
 
 -- JSON Save System
