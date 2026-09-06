@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>🎬 أنمي ون بيس · الحلقات</title>
     <style>
         * {
@@ -34,7 +34,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 12px;
             position: relative;
             overflow-x: hidden;
         }
@@ -68,7 +68,7 @@
         }
         .card {
             position: relative;
-            padding: 28px 26px 24px;
+            padding: 20px 16px 18px;
             border-radius: var(--radius);
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -81,12 +81,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             flex-wrap: wrap;
             gap: 8px;
         }
         .title {
-            font-size: 30px;
+            font-size: clamp(22px, 5vw, 30px);
             font-weight: 800;
             background: linear-gradient(135deg, #5b9eff, #2a7fff);
             -webkit-background-clip: text;
@@ -94,22 +94,23 @@
             letter-spacing: -0.3px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .title span {
             background: rgba(42, 127, 255, 0.12);
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 40px;
-            font-size: 13px;
+            font-size: clamp(11px, 2vw, 13px);
             font-weight: 600;
             -webkit-text-fill-color: var(--text-secondary);
             border: 1px solid rgba(42, 127, 255, 0.1);
+            white-space: nowrap;
         }
         .status-badge {
-            font-size: 13px;
+            font-size: clamp(12px, 1.8vw, 14px);
             color: var(--text-secondary);
             background: rgba(42, 127, 255, 0.06);
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 30px;
             border: 1px solid rgba(42, 127, 255, 0.06);
         }
@@ -119,21 +120,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 16px;
             direction: ltr;
             flex-wrap: wrap;
         }
 
         .nav-btn, .page-btn {
-            width: 42px;
-            height: 42px;
+            width: clamp(36px, 6vw, 44px);
+            height: clamp(36px, 6vw, 44px);
             background-color: #2d3238;
             border: 1px solid #4a5568;
             border-radius: 8px;
             color: #ffffff;
             font-weight: bold;
-            font-size: 15px;
+            font-size: clamp(13px, 2vw, 16px);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -141,6 +142,7 @@
             justify-content: center;
             text-decoration: none;
             font-family: inherit;
+            flex-shrink: 0;
         }
 
         .nav-btn:hover, .page-btn:hover {
@@ -166,13 +168,13 @@
 
         /* خانة إدخال رقم الحلقة */
         .ep-input {
-            width: 60px;
-            height: 42px;
+            width: clamp(50px, 8vw, 65px);
+            height: clamp(36px, 6vw, 44px);
             background-color: #2d3238;
             border: 1px solid #4a5568;
             border-radius: 8px;
             color: #ffffff;
-            font-size: 16px;
+            font-size: clamp(14px, 2vw, 17px);
             font-weight: bold;
             text-align: center;
             outline: none;
@@ -182,16 +184,26 @@
             border-color: var(--blue-main);
             box-shadow: 0 0 10px rgba(42, 127, 255, 0.2);
         }
+        /* إخفاء أزرار التحكم في حقل الرقم على المتصفحات */
+        .ep-input::-webkit-outer-spin-button,
+        .ep-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .ep-input[type=number] {
+            -moz-appearance: textfield;
+        }
 
         /* ===== شبكة الحلقات ===== */
         .episodes-container {
             width: 100%;
             max-height: 70vh;
             overflow-y: auto;
-            padding-left: 4px;
+            padding-left: 2px;
+            padding-right: 2px;
         }
         .episodes-container::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .episodes-container::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.02);
@@ -203,8 +215,8 @@
         }
         .episodes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
         }
         
         /* تصميم مربع الحلقة المحسن */
@@ -213,11 +225,16 @@
             background: linear-gradient(145deg, rgba(20, 30, 70, 0.9), rgba(10, 15, 40, 0.9));
             border: 1px solid rgba(42, 127, 255, 0.15);
             border-radius: 16px;
-            padding: 16px 10px;
+            padding: 14px 8px;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
             overflow: hidden;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         .episode-card::before {
@@ -234,7 +251,7 @@
 
         .episode-card:hover {
             border-color: var(--blue-main);
-            transform: translateY(-5px) scale(1.03);
+            transform: translateY(-4px) scale(1.02);
             box-shadow: 0 10px 30px rgba(42, 127, 255, 0.15);
         }
 
@@ -243,32 +260,34 @@
         }
 
         .episode-card .ep-num {
-            font-size: 24px;
+            font-size: clamp(20px, 4vw, 26px);
             font-weight: 800;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             position: relative;
             z-index: 1;
             text-shadow: 0 0 15px rgba(42, 127, 255, 0.3);
+            line-height: 1.2;
         }
         
         .episode-card .ep-status {
-            font-size: 12px;
+            font-size: clamp(10px, 1.5vw, 12px);
             color: var(--text-secondary);
             background: rgba(42, 127, 255, 0.1);
-            padding: 4px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
             border: 1px solid rgba(42, 127, 255, 0.1);
             font-weight: 600;
             letter-spacing: 0.5px;
             position: relative;
             z-index: 1;
+            white-space: nowrap;
         }
         
         .episode-card .play-icon {
-            font-size: 24px;
+            font-size: clamp(18px, 3vw, 24px);
             color: var(--blue-hover);
-            margin-top: 10px;
+            margin-top: 8px;
             opacity: 0;
             transform: translateY(10px);
             transition: var(--transition);
@@ -283,12 +302,12 @@
 
         .episodes-stats {
             display: flex;
-            gap: 18px;
+            gap: 12px;
             flex-wrap: wrap;
             color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 20px;
-            padding-top: 16px;
+            font-size: clamp(12px, 1.8vw, 14px);
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 1px solid rgba(42, 127, 255, 0.05);
         }
         .episodes-stats strong {
@@ -307,23 +326,25 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 12px;
         }
         .player-overlay.active {
             display: flex;
         }
         .player-header {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
+            top: 10px;
+            left: 10px;
+            right: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 10;
+            gap: 10px;
+            padding: 0 8px;
         }
         .player-header .site-name {
-            font-size: 22px;
+            font-size: clamp(18px, 4vw, 24px);
             font-weight: 800;
             background: linear-gradient(135deg, #5b9eff, #2a7fff);
             -webkit-background-clip: text;
@@ -333,12 +354,13 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
-            font-size: 20px;
-            padding: 4px 18px;
+            font-size: clamp(14px, 2.5vw, 20px);
+            padding: 2px 14px;
             border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
+            white-space: nowrap;
         }
         .player-header .close-player:hover {
             background: rgba(255, 255, 255, 0.06);
@@ -346,47 +368,91 @@
         }
         .player-info {
             color: var(--text-secondary);
-            font-size: 18px;
-            margin-bottom: 16px;
+            font-size: clamp(14px, 2.5vw, 20px);
+            margin-bottom: 10px;
             z-index: 5;
             text-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-align: center;
+            padding: 0 10px;
         }
         .player-overlay video {
-            max-width: 95vw;
-            max-height: 78vh;
-            border-radius: 16px;
+            max-width: 98vw;
+            max-height: 75vh;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
             border: 1px solid rgba(42, 127, 255, 0.1);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
             z-index: 5;
             background: #000;
+            aspect-ratio: 16 / 9;
+            object-fit: contain;
         }
         .player-error {
             color: #ff6b6b;
-            font-size: 18px;
-            margin-top: 16px;
+            font-size: clamp(14px, 2vw, 18px);
+            margin-top: 12px;
             z-index: 5;
             display: none;
             background: rgba(255, 80, 80, 0.04);
-            padding: 8px 24px;
+            padding: 6px 20px;
             border-radius: 40px;
             border: 1px solid rgba(255, 80, 80, 0.06);
+            text-align: center;
         }
         .player-error.show {
             display: block;
         }
 
+        /* ===== تحسينات إضافية للشاشات الصغيرة ===== */
         @media (max-width: 650px) {
-            .card { padding: 20px 14px; }
-            .title { font-size: 24px; }
-            .episodes-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-            .episode-card .ep-num { font-size: 20px; }
+            .card { padding: 16px 10px; }
+            .header { flex-direction: row; align-items: center; gap: 6px; }
+            .episodes-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+            .episode-card { min-height: 80px; padding: 10px 6px; }
+            .episode-card .ep-num { font-size: 18px; }
+            .episode-card .ep-status { font-size: 10px; padding: 2px 8px; }
             .player-overlay video { max-height: 60vh; }
-            .header { flex-direction: column; align-items: flex-start; }
-            .nav-btn, .page-btn { width: 35px; height: 35px; font-size: 13px; }
-            .ep-input { width: 50px; height: 35px; font-size: 14px; }
+            .nav-btn, .page-btn { width: 34px; height: 34px; font-size: 12px; }
+            .ep-input { width: 46px; height: 34px; font-size: 13px; }
+            .episodes-nav-container { gap: 4px; }
         }
+
         @media (max-width: 400px) {
-            .episodes-grid { grid-template-columns: repeat(2, 1fr); }
+            .episodes-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .episode-card { min-height: 70px; padding: 8px 4px; }
+            .episode-card .ep-num { font-size: 16px; }
+            .card { padding: 12px 8px; border-radius: 14px; }
+            .title { font-size: 18px; }
+            .title span { font-size: 10px; padding: 1px 8px; }
+            .status-badge { font-size: 10px; padding: 3px 10px; }
+        }
+
+        @media (max-width: 350px) {
+            .episodes-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            .episode-card { min-height: 60px; padding: 6px 4px; border-radius: 10px; }
+            .episode-card .ep-num { font-size: 14px; }
+            .episode-card .ep-status { font-size: 8px; padding: 1px 6px; }
+            .episode-card .play-icon { font-size: 14px; margin-top: 4px; }
+            .nav-btn, .page-btn { width: 30px; height: 30px; font-size: 10px; border-radius: 6px; }
+            .ep-input { width: 40px; height: 30px; font-size: 11px; }
+            .episodes-nav-container { gap: 3px; }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            .app { width: min(920px, 95vw); }
+            .card { padding: 12px 14px; }
+            .header { margin-bottom: 10px; }
+            .episodes-nav-container { margin-bottom: 10px; }
+            .episodes-container { max-height: 60vh; }
+            .episodes-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+            .episode-card { min-height: 60px; padding: 8px 6px; }
+            .episode-card .ep-num { font-size: 16px; margin-bottom: 2px; }
+            .episode-card .ep-status { font-size: 9px; padding: 1px 8px; }
+            .episode-card .play-icon { font-size: 14px; margin-top: 4px; }
+            .player-overlay video { max-height: 70vh; }
+            .player-info { margin-bottom: 4px; }
+            .player-header { top: 6px; }
         }
     </style>
 </head>
@@ -398,12 +464,12 @@
 <!-- ===== PLAYER OVERLAY ===== -->
 <div class="player-overlay" id="playerOverlay">
     <div class="player-header">
-        <div class="site-name">🎬 أنمي </div>
+        <div class="site-name">🎬 أنمي</div>
         <button class="close-player" id="closePlayerBtn">✕ إغلاق</button>
     </div>
     <div class="player-info" id="playerInfo">جاري التحميل...</div>
-    <video id="playerVideo" controls autoplay></video>
-    <div class="player-error" id="playerError">❌الحلقة غير متوفره </div>
+    <video id="playerVideo" controls autoplay playsinline></video>
+    <div class="player-error" id="playerError">❌ الحلقة غير متوفره</div>
 </div>
 
 <!-- ===== MAIN APP ===== -->
@@ -412,7 +478,7 @@
         <div class="header">
             <div class="title">
                 📺 الحلقات
-                <span>ون بيس </span>
+                <span>ون بيس</span>
             </div>
             <div class="status-badge" id="statusBadge">✅</div>
         </div>
@@ -421,10 +487,10 @@
         <div class="episodes-nav-container">
             <button class="nav-btn" id="prev-btn">&#10094;</button>
             
-            <div id="pagination-buttons" style="display: flex; gap: 8px; align-items: center;"></div>
+            <div id="pagination-buttons" style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap; justify-content: center;"></div>
             
             <!-- خانة إدخال رقم الحلقة -->
-            <input type="number" class="ep-input" id="epInput" placeholder="رقم" min="1" max="1176" title="اكتب رقم الحلقة ثم اضغط Enter">
+            <input type="number" class="ep-input" id="epInput" placeholder="رقم" min="1" max="1176" title="اكتب رقم الحلقة ثم اضغط Enter" inputmode="numeric">
             
             <button class="nav-btn" id="next-btn">&#10095;</button>
         </div>
@@ -432,7 +498,7 @@
         <div class="episodes-container" id="episodesContainer">
             <div id="episodesGrid" class="episodes-grid"></div>
             <div class="episodes-stats" id="epStats">
-                <span>! <strong id="totalFound">0</strong> حلقة متاحة</span>
+                <span>! <strong id="totalFound">0</strong> حلقه غير متاحة</span>
                 <span>!! <strong id="availableCount">0</strong> قابلة للتشغيل</span>
             </div>
         </div>
@@ -481,7 +547,6 @@
         // ============================================================
         function loadEpisodes() {
             const episodes = [];
-            // هنا نقوم بتوليد الحلقات، كلها متاحة (لأنك طلبت شيل المكسور نهائياً)
             for (let i = 1; i <= MAX_EP; i++) {
                 episodes.push({ num: i, status: 'available' });
             }
@@ -490,7 +555,7 @@
             totalEpisodes = episodes.length;
 
             availableCountEl.textContent = totalEpisodes;
-            statusBadge.textContent = `✅ ${totalEpisodes} ّ`;
+            statusBadge.textContent = `✅ ${totalEpisodes} حلقة`;
 
             currentPage = 1;
             renderEpisodes();
@@ -542,44 +607,37 @@
             }
             
             const current = currentPage;
-            
             let html = '';
 
-            // عرض أول 3 صفحات دائماً إذا كنا في البداية
             if (current <= 3) {
                 for (let i = 1; i <= Math.min(3, totalPages); i++) {
                     html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
                 }
                 if (totalPages > 4) {
-                    html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                    html += `<span style="color:#fff;padding:0 2px;font-size:clamp(12px,1.5vw,16px);">...</span>`;
                     html += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
                 }
             } else if (current >= totalPages - 1) {
-                // في النهاية
                 html += `<button class="page-btn" onclick="changePage(1)">1</button>`;
-                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                html += `<span style="color:#fff;padding:0 2px;font-size:clamp(12px,1.5vw,16px);">...</span>`;
                 for (let i = totalPages - 2; i <= totalPages; i++) {
                     html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
                 }
             } else {
-                // في المنتصف
                 html += `<button class="page-btn" onclick="changePage(1)">1</button>`;
-                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                html += `<span style="color:#fff;padding:0 2px;font-size:clamp(12px,1.5vw,16px);">...</span>`;
                 for (let i = current - 1; i <= current + 1; i++) {
                     html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
                 }
-                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                html += `<span style="color:#fff;padding:0 2px;font-size:clamp(12px,1.5vw,16px);">...</span>`;
                 html += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
             }
 
             paginationButtons.innerHTML = html;
-
-            // تفعيل وتعطيل أزرار السابق والتالي
             prevBtn.disabled = current <= 1;
             nextBtn.disabled = current >= totalPages;
         }
 
-        // دالة تغيير الصفحة
         window.changePage = function(page) {
             const totalPages = Math.ceil(totalEpisodes / ITEMS_PER_PAGE);
             if (page < 1 || page > totalPages) return;
@@ -589,7 +647,6 @@
             if (container) container.scrollTop = 0;
         };
 
-        // إصلاح أزرار السابق والتالي
         prevBtn.addEventListener('click', function() {
             if (currentPage > 1) changePage(currentPage - 1);
         });
@@ -599,18 +656,13 @@
             if (currentPage < totalPages) changePage(currentPage + 1);
         });
 
-        // دالة القفز لرقم محدد (خانة الإدخال)
         epInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const val = parseInt(this.value);
                 if (val >= 1 && val <= totalEpisodes) {
                     const targetPage = Math.ceil(val / ITEMS_PER_PAGE);
                     changePage(targetPage);
-                    this.value = ''; // مسح الحقل بعد القفز
-                    
-                    // البحث عن الحلقة داخل الصفحة وفتحها (اختياري)
-                    // إذا أردت فتح الحلقة فوراً عند الإدخال، أزل التعليق عن السطر التالي:
-                    // openPlayer(val);
+                    this.value = '';
                 } else {
                     alert('الرجاء إدخال رقم صحيح بين 1 و ' + totalEpisodes);
                 }
@@ -633,7 +685,7 @@
 
             playerVideo.onerror = function() {
                 playerError.classList.add('show');
-                playerError.textContent = `❌ الحلقة ${ep} غير متوفرة  `;
+                playerError.textContent = `❌ الحلقة ${ep} غير متوفرة`;
                 playerInfo.textContent = `❌ الحلقة ${ep} - غير متوفرة`;
             };
 
