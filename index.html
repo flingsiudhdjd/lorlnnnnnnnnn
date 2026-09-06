@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Counter Pro</title>
+    <title>🎬 أنمي ون بيس · الحلقات</title>
     <style>
         * {
             margin: 0;
@@ -11,635 +11,299 @@
             box-sizing: border-box;
         }
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111;
-            --bg-card: rgba(15, 15, 20, 0.92);
-            --border-color: rgba(220, 40, 40, 0.15);
-            --border-hover: rgba(220, 40, 40, 0.35);
-            --text-primary: #f0f0f0;
-            --text-secondary: #999;
-            --text-muted: #555;
-            --red-main: #dc2828;
-            --red-hover: #ff3b3b;
-            --red-glow: rgba(220, 40, 40, 0.08);
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            --radius: 16px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-primary: #0b0e1a;
+            --bg-secondary: #11162b;
+            --bg-card: rgba(16, 22, 48, 0.92);
+            --border-color: rgba(50, 130, 255, 0.2);
+            --border-hover: rgba(60, 150, 255, 0.5);
+            --text-primary: #eef4ff;
+            --text-secondary: #a8c0ff;
+            --text-muted: #5b75a0;
+            --blue-main: #2a7fff;
+            --blue-hover: #4a9eff;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            --radius: 20px;
+            --transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
         }
-        html,
-        body {
+        html, body {
             width: 100%;
             min-height: 100vh;
             background: var(--bg-primary);
             color: var(--text-primary);
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
             position: relative;
             overflow-x: hidden;
         }
-        #mainCanvas {
+
+        /* ===== خلفية الصورة مع Blur ===== */
+        .background-image {
             position: fixed;
             inset: 0;
-            width: 100%;
-            height: 100%;
             z-index: 0;
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGb3JDb1n2BOHvgnWo3F4npYiffjAj-HhJ0rOllORdgXnWjXcY97xTeOP0gNi_4gzsqLKxMAjD5tRMl_H3uc5jZRRqu2A_g6fsJ1-PQ8BCKpffPjKZzAmm7D1i6gm1NmkSkUcNvOWPNOsB/s1600/One-Piece-Monkey-D-Luffy-Wallpapers-003.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px);
+            opacity: 0.4; 
             pointer-events: none;
         }
-        .bg-vignette {
+        
+        .vignette {
             position: fixed;
             inset: 0;
             z-index: 1;
             pointer-events: none;
-            background:
-                radial-gradient(ellipse at 50% 50%, rgba(180, 20, 20, 0.03), transparent 60%),
-                radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+            background: radial-gradient(ellipse at 50% 50%, rgba(20, 60, 180, 0.03), transparent 70%),
+                        radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
         }
+
         .app {
-            width: min(800px, 98vw);
+            width: min(920px, 98vw);
             position: relative;
             z-index: 2;
         }
-        .top-controls {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 50;
-            display: flex;
-            gap: 10px;
-            flex-direction: row;
-        }
-        .top-controls button {
-            background: rgba(20, 20, 25, 0.85);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 8px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: var(--transition);
-            backdrop-filter: blur(12px);
-            font-family: inherit;
-            letter-spacing: 0.3px;
-        }
-        .top-controls button:hover {
-            background: rgba(30, 30, 35, 0.95);
-            border-color: var(--border-hover);
-            color: #fff;
-            transform: translateY(-1px) scale(1.03);
-            box-shadow: 0 8px 30px rgba(220, 40, 40, 0.08);
-        }
-        .top-controls button.active {
-            border-color: var(--red-main);
-            color: var(--red-main);
-            box-shadow: 0 0 25px rgba(220, 40, 40, 0.05);
-        }
         .card {
             position: relative;
-            padding: 32px 30px 28px;
+            padding: 28px 26px 24px;
             border-radius: var(--radius);
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
-            backdrop-filter: blur(14px);
+            backdrop-filter: blur(16px);
             transition: var(--transition);
         }
-        .card:hover {
-            border-color: var(--border-hover);
-        }
+
         .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .title {
-            font-size: 34px;
-            font-weight: 800;
-            color: var(--red-main);
-            letter-spacing: -0.5px;
-            text-shadow: 0 0 40px rgba(220, 40, 40, 0.1);
-        }
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .subtitle span {
-            color: var(--red-main);
-            font-weight: 600;
-        }
-        .field {
-            margin-top: 16px;
-        }
-        .label {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .label .optional {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 400;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        input,
-        textarea {
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            outline: none;
-            color: var(--text-primary);
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
-            padding: 0 16px;
-            font-size: 16px;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        input:focus,
-        textarea:focus {
-            border-color: var(--border-hover);
-            box-shadow: 0 0 0 3px rgba(220, 40, 40, 0.04);
-            background: rgba(0, 0, 0, 0.7);
-        }
-        #targetInput {
-            height: 48px;
-            font-size: 15px;
-        }
-        #typingBox {
-            height: 180px;
-            resize: none;
-            padding: 14px 16px;
-            font-size: 17px;
-            line-height: 1.8;
-        }
-        #typingBox::placeholder,
-        #targetInput::placeholder {
-            color: var(--text-muted);
-        }
-        .mistake-line {
-            margin-top: 12px;
-            color: var(--text-secondary);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .mistake-line strong {
-            color: var(--red-main);
-            font-size: 18px;
-            font-weight: 700;
-            min-width: 24px;
-            text-align: center;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .stat {
-            padding: 14px 8px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            transition: var(--transition);
-        }
-        .stat:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-        }
-        .stat-value.red {
-            color: var(--red-main);
-        }
-        .stat-value.gold {
-            color: #f0a030;
-        }
-        .stat-value.cyan {
-            color: #4fc3f7;
-        }
-        .stat-value.orange {
-            color: #ff8a5c;
-        }
-        .bottom {
-            margin-top: 16px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
+            margin-bottom: 22px;
             flex-wrap: wrap;
-        }
-        .status {
-            color: var(--text-secondary);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
             gap: 8px;
         }
-        .status .dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            transition: var(--transition);
+        .title {
+            font-size: 30px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5b9eff, #2a7fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .status .dot.idle {
-            background: var(--text-muted);
-        }
-        .status .dot.running {
-            background: var(--red-main);
-            animation: pulse-dot 1.2s ease-in-out infinite;
-        }
-        .status .dot.stopped {
-            background: #f0a030;
-        }
-        @keyframes pulse-dot {
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.35);
-                opacity: 0.5;
-            }
-        }
-        #statusText {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        .reset-btn {
-            border: none;
-            outline: none;
-            cursor: pointer;
-            color: #fff;
-            font-weight: 600;
+        .title span {
+            background: rgba(42, 127, 255, 0.12);
+            padding: 2px 14px;
+            border-radius: 40px;
             font-size: 13px;
-            background: var(--red-main);
-            padding: 10px 24px;
-            border-radius: 10px;
-            transition: var(--transition);
+            font-weight: 600;
+            -webkit-text-fill-color: var(--text-secondary);
+            border: 1px solid rgba(42, 127, 255, 0.1);
+        }
+        .status-badge {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: rgba(42, 127, 255, 0.06);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(42, 127, 255, 0.06);
+        }
+        
+        /* ===== تنسيق السلايدر والتنقل ===== */
+        .episodes-nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            direction: ltr;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn, .page-btn {
+            width: 42px;
+            height: 42px;
+            background-color: #2d3238;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
             font-family: inherit;
         }
-        .reset-btn:hover {
-            background: var(--red-hover);
-            box-shadow: 0 8px 30px rgba(220, 40, 40, 0.15);
+
+        .nav-btn:hover, .page-btn:hover {
+            background-color: var(--blue-main);
+            border-color: var(--blue-main);
             transform: translateY(-2px);
         }
-        .reset-btn:active {
-            transform: scale(0.97);
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            background-color: #2d3238;
+            border-color: #4a5568;
         }
-        .history {
-            margin-top: 20px;
-            padding-top: 18px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
+
+        .page-btn.active {
+            background: linear-gradient(135deg, var(--blue-main), var(--blue-hover));
+            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(42, 127, 255, 0.3);
         }
-        .history-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .history-title {
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .history-title .badge {
-            background: rgba(220, 40, 40, 0.1);
-            color: var(--red-main);
-            font-size: 11px;
-            padding: 1px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(220, 40, 40, 0.08);
-        }
-        .history-actions button {
-            padding: 4px 14px;
-            font-size: 11px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
+
+        /* خانة إدخال رقم الحلقة */
+        .ep-input {
+            width: 60px;
+            height: 42px;
+            background-color: #2d3238;
+            border: 1px solid #4a5568;
             border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        .history-actions button:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-        #historyList {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 220px;
-            overflow-y: auto;
-        }
-        #historyList::-webkit-scrollbar {
-            width: 4px;
-        }
-        #historyList::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 10px;
-            padding: 10px 14px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            transition: var(--transition);
-        }
-        .history-item:hover {
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-        .history-item .left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .history-item .right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            color: var(--text-muted);
-        }
-        .history-item .stat-chars {
-            color: var(--red-main);
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .history-item .stat-errors {
-            color: #f0a030;
-            font-weight: 600;
-        }
-        .history-item .stat-cps {
-            color: #4fc3f7;
-            font-weight: 600;
-        }
-        .history-item .stat-bs {
-            color: var(--text-secondary);
-        }
-        .history-item .stat-time {
-            color: var(--text-muted);
-        }
-        .history-item .label-tag {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 1px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            color: var(--text-muted);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .history-empty {
-            color: var(--text-muted);
-            font-size: 13px;
-            text-align: center;
-            padding: 20px 0;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(5, 5, 5, 0.94);
-            backdrop-filter: blur(24px);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .overlay.active {
-            display: flex;
-        }
-        .overlay canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .afk-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-12px);
-            }
-        }
-        .afk-title {
-            font-size: 100px;
-            font-weight: 900;
-            color: var(--red-main);
-            text-shadow: 0 0 60px rgba(220, 40, 40, 0.25), 0 10px 40px rgba(0, 0, 0, 0.8);
-            letter-spacing: 8px;
-        }
-        .afk-timer {
-            font-size: 60px;
-            font-weight: 300;
-            color: #ff5555;
-            text-shadow: 0 0 40px rgba(220, 40, 40, 0.15);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
-            margin-top: 10px;
-        }
-        .afk-sub {
+            color: #ffffff;
             font-size: 16px;
-            color: var(--text-secondary);
-            margin-top: 16px;
-            letter-spacing: 1px;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+            transition: var(--transition);
         }
-        .afk-sub span {
-            color: var(--red-main);
-            font-weight: 600;
+        .ep-input:focus {
+            border-color: var(--blue-main);
+            box-shadow: 0 0 10px rgba(42, 127, 255, 0.2);
         }
+
+        /* ===== شبكة الحلقات ===== */
         .episodes-container {
-            position: relative;
-            z-index: 1;
-            width: min(750px, 100%);
-            max-height: 90vh;
+            width: 100%;
+            max-height: 70vh;
             overflow-y: auto;
-            padding: 24px 28px;
-            background: rgba(10, 10, 12, 0.9);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            padding-left: 4px;
         }
         .episodes-container::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
+        }
+        .episodes-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
         }
         .episodes-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(42, 127, 255, 0.3);
             border-radius: 10px;
         }
-        .episodes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
         }
-        .episodes-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--red-main);
-            text-shadow: 0 0 30px rgba(220, 40, 40, 0.08);
-        }
-        .episodes-count {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        .episodes-close {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--text-secondary);
-            font-size: 20px;
-            padding: 4px 16px;
-            border-radius: 8px;
+        
+        /* تصميم مربع الحلقة المحسن */
+        .episode-card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(20, 30, 70, 0.9), rgba(10, 15, 40, 0.9));
+            border: 1px solid rgba(42, 127, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px 10px;
+            text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            font-family: inherit;
+            overflow: hidden;
         }
-        .episodes-close:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-        .episodes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 16px;
-            min-height: 250px;
-        }
-        .episode-item {
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 10px;
-            padding: 14px 18px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .episode-item:hover {
-            background: rgba(20, 20, 25, 0.6);
-            border-color: var(--border-hover);
-            transform: translateX(-4px);
-            box-shadow: 0 4px 20px rgba(220, 40, 40, 0.04);
-        }
-        .episode-item .ep-num {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 16px;
-        }
-        .episode-item .ep-status {
-            font-size: 13px;
-            color: #4caf50;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .episode-item .ep-status .play-icon {
-            font-size: 18px;
-            opacity: 0.5;
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(42, 127, 255, 0.1) 0%, transparent 60%);
+            opacity: 0;
             transition: var(--transition);
         }
-        .episode-item:hover .ep-status .play-icon {
+
+        .episode-card:hover {
+            border-color: var(--blue-main);
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 30px rgba(42, 127, 255, 0.15);
+        }
+
+        .episode-card:hover::before {
             opacity: 1;
-            color: var(--red-main);
         }
-        .episode-item .ep-status.error {
-            color: var(--red-main);
+
+        .episode-card .ep-num {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 15px rgba(42, 127, 255, 0.3);
         }
-        .episodes-pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            flex-wrap: wrap;
-        }
-        .episodes-pagination button {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
-            padding: 5px 13px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: var(--transition);
-            font-family: inherit;
-            min-width: 36px;
-        }
-        .episodes-pagination button:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-        .episodes-pagination button.active {
-            background: var(--red-main);
-            border-color: var(--red-main);
-            color: #fff;
-        }
-        .episodes-pagination button:disabled {
-            opacity: 0.25;
-            cursor: not-allowed;
-        }
-        .episodes-pagination .page-info {
-            color: var(--text-muted);
+        
+        .episode-card .ep-status {
             font-size: 12px;
-            padding: 0 8px;
+            color: var(--text-secondary);
+            background: rgba(42, 127, 255, 0.1);
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(42, 127, 255, 0.1);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
         }
+        
+        .episode-card .play-icon {
+            font-size: 24px;
+            color: var(--blue-hover);
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .episode-card:hover .play-icon {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .episodes-stats {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(42, 127, 255, 0.05);
+        }
+        .episodes-stats strong {
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        /* ===== تنسيق المشغل ===== */
         .player-overlay {
             display: none;
             position: fixed;
             inset: 0;
             z-index: 200;
-            background: rgba(0, 0, 0, 0.97);
+            background: rgba(6, 8, 20, 0.97);
+            backdrop-filter: blur(30px);
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -659,25 +323,25 @@
             z-index: 10;
         }
         .player-header .site-name {
-            color: var(--red-main);
             font-size: 22px;
             font-weight: 800;
-            text-shadow: 0 0 30px rgba(220, 40, 40, 0.08);
-            letter-spacing: 1px;
+            background: linear-gradient(135deg, #5b9eff, #2a7fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .player-header .close-player {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
             font-size: 20px;
             padding: 4px 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
         }
         .player-header .close-player:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             color: #fff;
         }
         .player-info {
@@ -685,1336 +349,329 @@
             font-size: 18px;
             margin-bottom: 16px;
             z-index: 5;
+            text-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
         .player-overlay video {
             max-width: 95vw;
-            max-height: 80vh;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            max-height: 78vh;
+            border-radius: 16px;
+            border: 1px solid rgba(42, 127, 255, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
             z-index: 5;
             background: #000;
         }
         .player-error {
-            color: var(--red-main);
-            font-size: 20px;
+            color: #ff6b6b;
+            font-size: 18px;
             margin-top: 16px;
             z-index: 5;
             display: none;
+            background: rgba(255, 80, 80, 0.04);
+            padding: 8px 24px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 80, 80, 0.06);
         }
         .player-error.show {
             display: block;
         }
-        .loading-spinner {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            border: 3px solid rgba(255, 255, 255, 0.04);
-            border-top: 3px solid var(--red-main);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin-top: 12px;
-        }
-        @media (max-width: 700px) {
-            .top-controls {
-                top: 12px;
-                right: 12px;
-                gap: 6px;
-                flex-direction: column;
-            }
-            .top-controls button {
-                padding: 6px 14px;
-                font-size: 12px;
-            }
-            .card {
-                padding: 20px 16px 18px;
-            }
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            .stat {
-                padding: 10px 4px;
-            }
-            .stat-value {
-                font-size: 20px;
-            }
-            .bottom {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .reset-btn {
-                width: 100%;
-                justify-content: center;
-                text-align: center;
-            }
-            .title {
-                font-size: 26px;
-            }
-            #typingBox {
-                height: 130px;
-                font-size: 15px;
-            }
-            .afk-title {
-                font-size: 60px;
-                letter-spacing: 4px;
-            }
-            .afk-timer {
-                font-size: 40px;
-            }
-            .episodes-container {
-                padding: 16px 14px;
-            }
-            .episodes-title {
-                font-size: 20px;
-            }
-            .episode-item {
-                padding: 11px 14px;
-                font-size: 14px;
-            }
-            .history-item {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 4px;
-            }
-            .history-item .left,
-            .history-item .right {
-                justify-content: space-between;
-            }
-            .player-overlay video {
-                max-width: 98vw;
-                max-height: 65vh;
-            }
-            .player-header .site-name {
-                font-size: 18px;
-            }
-            .player-header {
-                top: 12px;
-                left: 12px;
-                right: 12px;
-            }
+
+        @media (max-width: 650px) {
+            .card { padding: 20px 14px; }
+            .title { font-size: 24px; }
+            .episodes-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+            .episode-card .ep-num { font-size: 20px; }
+            .player-overlay video { max-height: 60vh; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .nav-btn, .page-btn { width: 35px; height: 35px; font-size: 13px; }
+            .ep-input { width: 50px; height: 35px; font-size: 14px; }
         }
         @media (max-width: 400px) {
-            .stats {
-                grid-template-columns: 1fr 1fr;
-                gap: 5px;
-            }
-            .stat {
-                padding: 8px 2px;
-            }
-            .stat-value {
-                font-size: 17px;
-            }
-            .label {
-                font-size: 12px;
-                flex-wrap: wrap;
-            }
-            .optional {
-                font-size: 10px;
-            }
-            .afk-title {
-                font-size: 44px;
-            }
-            .afk-timer {
-                font-size: 32px;
-            }
-            .top-controls button {
-                padding: 5px 10px;
-                font-size: 11px;
-            }
-            .episodes-pagination button {
-                padding: 4px 10px;
-                font-size: 12px;
-                min-width: 30px;
-            }
+            .episodes-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="mainCanvas"></canvas>
-    <div class="bg-vignette"></div>
+<div class="background-image"></div>
+<div class="vignette"></div>
 
-    <!-- ===== Top Controls ===== -->
-    <div class="top-controls">
-        <button id="afkBtn" aria-label="AFK">🌙 AFK</button>
-        <button id="epBtn" aria-label="Episodes">🎬 حلقات</button>
+<!-- ===== PLAYER OVERLAY ===== -->
+<div class="player-overlay" id="playerOverlay">
+    <div class="player-header">
+        <div class="site-name">🎬 أنمي </div>
+        <button class="close-player" id="closePlayerBtn">✕ إغلاق</button>
     </div>
+    <div class="player-info" id="playerInfo">جاري التحميل...</div>
+    <video id="playerVideo" controls autoplay></video>
+    <div class="player-error" id="playerError">❌الحلقة غير متوفره </div>
+</div>
 
-    <!-- ===== AFK Overlay ===== -->
-    <div class="overlay" id="afkOverlay">
-        <canvas id="afkCanvas"></canvas>
-        <div class="afk-content">
-            <div class="afk-title">~ AFK ~</div>
-            <div class="afk-timer" id="afkTimer">00:00:00</div>
-            <div class="afk-sub">اضغط <span>AFK</span> أو <span>ESC</span> للعودة</div>
+<!-- ===== MAIN APP ===== -->
+<div class="app">
+    <div class="card">
+        <div class="header">
+            <div class="title">
+                📺 الحلقات
+                <span>ون بيس </span>
+            </div>
+            <div class="status-badge" id="statusBadge">✅</div>
         </div>
-    </div>
 
-    <!-- ===== Episodes Overlay ===== -->
-    <div class="overlay" id="episodesOverlay">
-        <canvas id="episodesCanvas"></canvas>
-        <div class="episodes-container">
-            <div class="episodes-header">
-                <div>
-                    <div class="episodes-title">🎬 الحلقات</div>
-                    <div class="episodes-count" id="episodesCount">جاري التحميل...</div>
-                </div>
-                <button class="episodes-close" id="episodesClose">✕</button>
-            </div>
-            <div class="episodes-list" id="episodesList">
-                <div style="text-align:center;padding:40px 0;">
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">جاري اكتشاف الحلقات...</div>
-                    <div style="color:var(--text-muted);font-size:13px;margin-top:8px;" id="discoveryProgress">جاري فحص: 0</div>
-                </div>
-            </div>
-            <div class="episodes-pagination" id="episodesPagination"></div>
+        <!-- السلايدر والتنقل -->
+        <div class="episodes-nav-container">
+            <button class="nav-btn" id="prev-btn">&#10094;</button>
+            
+            <div id="pagination-buttons" style="display: flex; gap: 8px; align-items: center;"></div>
+            
+            <!-- خانة إدخال رقم الحلقة -->
+            <input type="number" class="ep-input" id="epInput" placeholder="رقم" min="1" max="1176" title="اكتب رقم الحلقة ثم اضغط Enter">
+            
+            <button class="nav-btn" id="next-btn">&#10095;</button>
         </div>
-    </div>
 
-    <!-- ===== Player Overlay ===== -->
-    <div class="player-overlay" id="playerOverlay">
-        <div class="player-header">
-            <div class="site-name">🎬 Lorln-One0piece</div>
-            <button class="close-player" id="closePlayerBtn">✕ إغلاق</button>
-        </div>
-        <div class="player-info" id="playerInfo">جاري التحميل...</div>
-        <video id="playerVideo" controls autoplay></video>
-        <div class="player-error" id="playerError">❌ الحلقة غير متوفرة أو الرابط مكسور</div>
-    </div>
-
-    <!-- ===== Main App ===== -->
-    <div class="app">
-        <div class="card">
-            <div class="header">
-                <div class="title">Typing Counter</div>
-                <div class="subtitle">اكتب الكلمة المطلوبة واحسب سرعتك ودقتك — <span>Enter</span> لإنهاء الجولة</div>
-            </div>
-
-            <div class="field">
-                <label class="label">
-                    <span>الكلمة المطلوبة</span>
-                    <span class="optional">اختياري</span>
-                </label>
-                <input id="targetInput" type="text" autocomplete="off" spellcheck="false" placeholder="مثال: hello world">
-            </div>
-
-            <div class="field">
-                <label class="label">
-                    <span>اكتب هنا</span>
-                    <span style="color:var(--text-muted);font-size:11px;">Backspace يُحتسب بعد البدء</span>
-                </label>
-                <textarea id="typingBox" autocomplete="off" spellcheck="false" placeholder="ابدأ الكتابة..."></textarea>
-            </div>
-
-            <div class="mistake-line">
-                الأخطاء: <strong id="mistakeText">0</strong>
-                <span style="color:var(--text-muted);font-size:11px;margin-right:6px;">(مقارنة بالكلمة المطلوبة)</span>
-            </div>
-
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-label">الأحرف</div>
-                    <div class="stat-value red" id="chars">0</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">الوقت</div>
-                    <div class="stat-value gold" id="time">0.0s</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">حرف / ثانية</div>
-                    <div class="stat-value cyan" id="cps">0.00</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Backspace</div>
-                    <div class="stat-value orange" id="backspaces">0</div>
-                </div>
-            </div>
-
-            <div class="bottom">
-                <div class="status">
-                    <span class="dot idle" id="statusDot"></span>
-                    الحالة: <span id="statusText">جاهز</span>
-                </div>
-                <button class="reset-btn" id="resetBtn">إعادة الجولة</button>
-            </div>
-
-            <div class="history">
-                <div class="history-header">
-                    <div class="history-title">
-                        الجولات السابقة
-                        <span class="badge" id="historyCount">0</span>
-                    </div>
-                    <div class="history-actions">
-                        <button id="clearLogsBtn">مسح السجل</button>
-                    </div>
-                </div>
-                <div id="historyList">
-                    <div class="history-empty">لا توجد جولات مسجلة بعد</div>
-                </div>
+        <div class="episodes-container" id="episodesContainer">
+            <div id="episodesGrid" class="episodes-grid"></div>
+            <div class="episodes-stats" id="epStats">
+                <span>! <strong id="totalFound">0</strong> حلقة متاحة</span>
+                <span>!! <strong id="availableCount">0</strong> قابلة للتشغيل</span>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        (function() {
-            'use strict';
+<script>
+    (function() {
+        'use strict';
 
-            // ============================================================
-            // 1. DOM REFS
-            // ============================================================
-            const mainCanvas = document.getElementById('mainCanvas');
-            const mainCtx = mainCanvas.getContext('2d');
+        // ============================================================
+        //  CONFIG
+        // ============================================================
+        const BASE_URL_1 = 'https://server.sanime.net/Video2/532/';   
+        const BASE_URL_2 = 'https://server.sanime.net/Video/532/';    
+        const MAX_EP = 1176; 
+        const ITEMS_PER_PAGE = 45;
 
-            const afkOverlay = document.getElementById('afkOverlay');
-            const afkCanvas = document.getElementById('afkCanvas');
-            const afkCtx = afkCanvas.getContext('2d');
-            const afkTimerEl = document.getElementById('afkTimer');
-            const afkBtn = document.getElementById('afkBtn');
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+        const grid = document.getElementById('episodesGrid');
+        const paginationButtons = document.getElementById('pagination-buttons');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const epInput = document.getElementById('epInput');
+        const totalFoundEl = document.getElementById('totalFound');
+        const availableCountEl = document.getElementById('availableCount');
+        const statusBadge = document.getElementById('statusBadge');
 
-            const episodesOverlay = document.getElementById('episodesOverlay');
-            const episodesCanvas = document.getElementById('episodesCanvas');
-            const epCtx = episodesCanvas.getContext('2d');
-            const episodesList = document.getElementById('episodesList');
-            const episodesPagination = document.getElementById('episodesPagination');
-            const episodesCount = document.getElementById('episodesCount');
-            const episodesClose = document.getElementById('episodesClose');
-            const epBtn = document.getElementById('epBtn');
+        const playerOverlay = document.getElementById('playerOverlay');
+        const playerVideo = document.getElementById('playerVideo');
+        const playerInfo = document.getElementById('playerInfo');
+        const playerError = document.getElementById('playerError');
+        const closePlayerBtn = document.getElementById('closePlayerBtn');
 
-            const playerOverlay = document.getElementById('playerOverlay');
-            const playerVideo = document.getElementById('playerVideo');
-            const playerInfo = document.getElementById('playerInfo');
-            const playerError = document.getElementById('playerError');
-            const closePlayerBtn = document.getElementById('closePlayerBtn');
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let allEpisodes = [];
+        let currentPage = 1;
+        let totalEpisodes = 0;
 
-            const targetInput = document.getElementById('targetInput');
-            const typingBox = document.getElementById('typingBox');
-            const charsEl = document.getElementById('chars');
-            const timeEl = document.getElementById('time');
-            const cpsEl = document.getElementById('cps');
-            const backspacesEl = document.getElementById('backspaces');
-            const mistakeText = document.getElementById('mistakeText');
-            const statusText = document.getElementById('statusText');
-            const statusDot = document.getElementById('statusDot');
-            const resetBtn = document.getElementById('resetBtn');
-            const clearLogsBtn = document.getElementById('clearLogsBtn');
-            const historyList = document.getElementById('historyList');
-            const historyCount = document.getElementById('historyCount');
-
-            // ============================================================
-            // 2. STATE
-            // ============================================================
-            const state = {
-                isAfk: false,
-                isEpisodesOpen: false,
-                isPlayerOpen: false,
-                currentPage: 1,
-                itemsPerPage: 45,
-                availableEpisodes: [],
-                totalEpisodes: 0,
-                isDiscovering: false,
-                discovered: false,
-                discoveryError: null,
-
-                running: false,
-                startTime: 0,
-                timerId: null,
-                backspaceCount: 0,
-                mistakes: 0,
-                sessionStarted: false,
-                historyEntries: [],
-
-                mainRunning: true,
-                afkRunning: false,
-                epRunning: false,
-            };
-
-            // ============================================================
-            // 3. CONSTANTS
-            // ============================================================
-            const EPISODE_BASE_URL = 'https://server.sanime.net/Video2/532/';
-            // قائمة الحلقات المعروفة (من 1 إلى 1121)
-            const KNOWN_EPISODES = [];
-            for (let i = 1; i <= 1121; i++) {
-                KNOWN_EPISODES.push(i);
+        // ============================================================
+        //  EPISODE LOADER (بدون مكسور)
+        // ============================================================
+        function loadEpisodes() {
+            const episodes = [];
+            // هنا نقوم بتوليد الحلقات، كلها متاحة (لأنك طلبت شيل المكسور نهائياً)
+            for (let i = 1; i <= MAX_EP; i++) {
+                episodes.push({ num: i, status: 'available' });
             }
 
-            // ============================================================
-            // 4. CANVAS - MAIN (مختصر)
-            // ============================================================
-            let mainW = 0,
-                mainH = 0;
-            let mainAnimId = null;
-            let mainTime = 0;
+            allEpisodes = episodes;
+            totalEpisodes = episodes.length;
 
-            const MAIN_LINES = 22;
-            const MAIN_WAVE_DATA = [];
-            for (let i = 0; i < MAIN_LINES; i++) {
-                MAIN_WAVE_DATA.push({
-                    baseY: 0,
-                    alpha: 0.03 + (i % 7) * 0.004,
-                    red: 180 + Math.floor(Math.random() * 75),
-                    speed1: 0.001 + Math.random() * 0.0005,
-                    speed2: 0.0007 + Math.random() * 0.0005,
-                    freq1: 0.004 + Math.random() * 0.0025,
-                    freq2: 0.002 + Math.random() * 0.002,
-                    phase1: i * 0.18,
-                    phase2: i * 0.07,
-                    amp1: 14 + Math.sin(i * 0.3) * 6,
-                    amp2: 8 + Math.cos(i * 0.2) * 5
-                });
+            availableCountEl.textContent = totalEpisodes;
+            statusBadge.textContent = `✅ ${totalEpisodes} ّ`;
+
+            currentPage = 1;
+            renderEpisodes();
+        }
+
+        // ============================================================
+        //  RENDER
+        // ============================================================
+        function renderEpisodes() {
+            if (allEpisodes.length === 0) {
+                grid.innerHTML = `<div style="text-align:center;padding:40px 0;color:var(--text-muted);">لا توجد حلقات متاحة</div>`;
+                renderPagination(1);
+                return;
             }
 
-            const MAIN_DEEP_DATA = [];
-            for (let i = 0; i < 4; i++) {
-                MAIN_DEEP_DATA.push({
-                    base: 0,
-                    red: 190 + Math.floor(Math.random() * 65),
-                    alpha: 0.012 + Math.random() * 0.012,
-                    freq: 0.002 + Math.random() * 0.003,
-                    speed: 0.0004 + Math.random() * 0.0005,
-                    amp: 18 + Math.random() * 20,
-                    phase: i * 0.5 + Math.random() * 0.5
-                });
-            }
+            const totalPages = Math.ceil(totalEpisodes / ITEMS_PER_PAGE);
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = Math.min(start + ITEMS_PER_PAGE, totalEpisodes);
+            const pageItems = allEpisodes.slice(start, end);
 
-            function resizeMainCanvas() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-                mainW = window.innerWidth;
-                mainH = window.innerHeight;
-                mainCanvas.width = Math.floor(mainW * dpr);
-                mainCanvas.height = Math.floor(mainH * dpr);
-                mainCanvas.style.width = mainW + 'px';
-                mainCanvas.style.height = mainH + 'px';
-                mainCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                for (let i = 0; i < MAIN_LINES; i++) {
-                    MAIN_WAVE_DATA[i].baseY = (i / (MAIN_LINES - 1)) * mainH;
-                }
-                for (let i = 0; i < 4; i++) {
-                    MAIN_DEEP_DATA[i].base = mainH * (0.12 + i * 0.2);
-                }
-            }
-
-            function drawMainWaves() {
-                if (!state.mainRunning) return;
-                mainCtx.clearRect(0, 0, mainW, mainH);
-                mainTime += 1;
-
-                for (let i = 0; i < MAIN_LINES; i++) {
-                    const d = MAIN_WAVE_DATA[i];
-                    mainCtx.beginPath();
-                    mainCtx.lineWidth = 1.6;
-                    mainCtx.strokeStyle = `rgba(${d.red},30,30,${d.alpha})`;
-                    for (let x = -20; x <= mainW + 20; x += 6) {
-                        const wave1 = Math.sin(x * d.freq1 + mainTime * d.speed1 + d.phase1) * d.amp1;
-                        const wave2 = Math.sin(x * d.freq2 - mainTime * d.speed2 + d.phase2) * d.amp2;
-                        const y = d.baseY + wave1 + wave2;
-                        x === -20 ? mainCtx.moveTo(x, y) : mainCtx.lineTo(x, y);
-                    }
-                    mainCtx.stroke();
-                }
-
-                for (let i = 0; i < 4; i++) {
-                    const d = MAIN_DEEP_DATA[i];
-                    mainCtx.beginPath();
-                    mainCtx.lineWidth = 2;
-                    mainCtx.strokeStyle = `rgba(${d.red},35,35,${d.alpha})`;
-                    for (let x = -20; x <= mainW + 20; x += 8) {
-                        const y = d.base + Math.sin(x * d.freq + mainTime * d.speed + d.phase) * d.amp;
-                        x === -20 ? mainCtx.moveTo(x, y) : mainCtx.lineTo(x, y);
-                    }
-                    mainCtx.stroke();
-                }
-
-                mainAnimId = requestAnimationFrame(drawMainWaves);
-            }
-
-            function startMainCanvas() {
-                if (mainAnimId) cancelAnimationFrame(mainAnimId);
-                state.mainRunning = true;
-                resizeMainCanvas();
-                drawMainWaves();
-            }
-
-            // ============================================================
-            // 5. CANVAS - AFK (مختصر)
-            // ============================================================
-            let afkW = 0,
-                afkH = 0;
-            let afkAnimId = null;
-            let afkTime = 0;
-
-            const AFK_LINES = 22;
-            const AFK_WAVE_DATA = [];
-            for (let i = 0; i < AFK_LINES; i++) {
-                AFK_WAVE_DATA.push({
-                    baseY: 0,
-                    alpha: 0.04 + (i % 8) * 0.005,
-                    red: 200 + Math.floor(Math.random() * 55),
-                    speed1: 0.001 + Math.random() * 0.0007,
-                    speed2: 0.0006 + Math.random() * 0.0007,
-                    freq1: 0.005 + Math.random() * 0.003,
-                    freq2: 0.002 + Math.random() * 0.0025,
-                    phase1: i * 0.2,
-                    phase2: i * 0.05,
-                    amp1: 18 + Math.sin(i * 0.3) * 8,
-                    amp2: 10 + Math.cos(i * 0.2) * 6
-                });
-            }
-
-            const AFK_DEEP_DATA = [];
-            for (let i = 0; i < 5; i++) {
-                AFK_DEEP_DATA.push({
-                    base: 0,
-                    red: 200 + Math.floor(Math.random() * 55),
-                    alpha: 0.015 + Math.random() * 0.015,
-                    freq: 0.002 + Math.random() * 0.003,
-                    speed: 0.0004 + Math.random() * 0.0007,
-                    amp: 22 + Math.random() * 28,
-                    phase: i * 0.6 + Math.random() * 0.5
-                });
-            }
-
-            function resizeAfkCanvas() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-                afkW = window.innerWidth;
-                afkH = window.innerHeight;
-                afkCanvas.width = Math.floor(afkW * dpr);
-                afkCanvas.height = Math.floor(afkH * dpr);
-                afkCanvas.style.width = afkW + 'px';
-                afkCanvas.style.height = afkH + 'px';
-                afkCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                for (let i = 0; i < AFK_LINES; i++) {
-                    AFK_WAVE_DATA[i].baseY = (i / (AFK_LINES - 1)) * afkH;
-                }
-                for (let i = 0; i < 5; i++) {
-                    AFK_DEEP_DATA[i].base = afkH * (0.05 + i * 0.16);
-                }
-            }
-
-            function drawAfkWaves() {
-                if (!state.afkRunning) return;
-                afkCtx.clearRect(0, 0, afkW, afkH);
-                afkTime += 1;
-
-                for (let i = 0; i < AFK_LINES; i++) {
-                    const d = AFK_WAVE_DATA[i];
-                    afkCtx.beginPath();
-                    afkCtx.lineWidth = 2.2;
-                    afkCtx.strokeStyle = `rgba(${d.red},20,20,${d.alpha})`;
-                    for (let x = -20; x <= afkW + 20; x += 5) {
-                        const wave1 = Math.sin(x * d.freq1 + afkTime * d.speed1 + d.phase1) * d.amp1;
-                        const wave2 = Math.sin(x * d.freq2 - afkTime * d.speed2 + d.phase2) * d.amp2;
-                        const y = d.baseY + wave1 + wave2;
-                        x === -20 ? afkCtx.moveTo(x, y) : afkCtx.lineTo(x, y);
-                    }
-                    afkCtx.stroke();
-                }
-
-                for (let i = 0; i < 5; i++) {
-                    const d = AFK_DEEP_DATA[i];
-                    afkCtx.beginPath();
-                    afkCtx.lineWidth = 2.8;
-                    afkCtx.strokeStyle = `rgba(${d.red},25,25,${d.alpha})`;
-                    for (let x = -20; x <= afkW + 20; x += 7) {
-                        const y = d.base + Math.sin(x * d.freq + afkTime * d.speed + d.phase) * d.amp;
-                        x === -20 ? afkCtx.moveTo(x, y) : afkCtx.lineTo(x, y);
-                    }
-                    afkCtx.stroke();
-                }
-
-                afkAnimId = requestAnimationFrame(drawAfkWaves);
-            }
-
-            function startAfkCanvas() {
-                if (afkAnimId) cancelAnimationFrame(afkAnimId);
-                state.afkRunning = true;
-                afkTime = 0;
-                resizeAfkCanvas();
-                drawAfkWaves();
-            }
-
-            function stopAfkCanvas() {
-                state.afkRunning = false;
-                if (afkAnimId) {
-                    cancelAnimationFrame(afkAnimId);
-                    afkAnimId = null;
-                }
-                afkCtx.clearRect(0, 0, afkW, afkH);
-            }
-
-            // ============================================================
-            // 6. CANVAS - EPISODES (مختصر)
-            // ============================================================
-            let epW = 0,
-                epH = 0;
-            let epAnimId = null;
-            let epTime = 0;
-
-            const EP_LINES = 20;
-            const EP_WAVE_DATA = [];
-            for (let i = 0; i < EP_LINES; i++) {
-                EP_WAVE_DATA.push({
-                    baseY: 0,
-                    alpha: 0.025 + (i % 6) * 0.004,
-                    red: 190 + Math.floor(Math.random() * 65),
-                    speed1: 0.001 + Math.random() * 0.0006,
-                    speed2: 0.0007 + Math.random() * 0.0006,
-                    freq1: 0.004 + Math.random() * 0.003,
-                    freq2: 0.002 + Math.random() * 0.002,
-                    phase1: i * 0.18,
-                    phase2: i * 0.06,
-                    amp1: 16 + Math.sin(i * 0.3) * 8,
-                    amp2: 10 + Math.cos(i * 0.2) * 6
-                });
-            }
-
-            const EP_DEEP_DATA = [];
-            for (let i = 0; i < 5; i++) {
-                EP_DEEP_DATA.push({
-                    base: 0,
-                    red: 195 + Math.floor(Math.random() * 60),
-                    alpha: 0.012 + Math.random() * 0.015,
-                    freq: 0.002 + Math.random() * 0.003,
-                    speed: 0.0004 + Math.random() * 0.0006,
-                    amp: 20 + Math.random() * 25,
-                    phase: i * 0.5 + Math.random() * 0.5
-                });
-            }
-
-            function resizeEpCanvas() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-                epW = window.innerWidth;
-                epH = window.innerHeight;
-                episodesCanvas.width = Math.floor(epW * dpr);
-                episodesCanvas.height = Math.floor(epH * dpr);
-                episodesCanvas.style.width = epW + 'px';
-                episodesCanvas.style.height = epH + 'px';
-                epCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                for (let i = 0; i < EP_LINES; i++) {
-                    EP_WAVE_DATA[i].baseY = (i / (EP_LINES - 1)) * epH;
-                }
-                for (let i = 0; i < 5; i++) {
-                    EP_DEEP_DATA[i].base = epH * (0.08 + i * 0.16);
-                }
-            }
-
-            function drawEpWaves() {
-                if (!state.epRunning) return;
-                epCtx.clearRect(0, 0, epW, epH);
-                epTime += 1;
-
-                for (let i = 0; i < EP_LINES; i++) {
-                    const d = EP_WAVE_DATA[i];
-                    epCtx.beginPath();
-                    epCtx.lineWidth = 1.8;
-                    epCtx.strokeStyle = `rgba(${d.red},25,25,${d.alpha})`;
-                    for (let x = -20; x <= epW + 20; x += 6) {
-                        const wave1 = Math.sin(x * d.freq1 + epTime * d.speed1 + d.phase1) * d.amp1;
-                        const wave2 = Math.sin(x * d.freq2 - epTime * d.speed2 + d.phase2) * d.amp2;
-                        const y = d.baseY + wave1 + wave2;
-                        x === -20 ? epCtx.moveTo(x, y) : epCtx.lineTo(x, y);
-                    }
-                    epCtx.stroke();
-                }
-
-                for (let i = 0; i < 5; i++) {
-                    const d = EP_DEEP_DATA[i];
-                    epCtx.beginPath();
-                    epCtx.lineWidth = 2.2;
-                    epCtx.strokeStyle = `rgba(${d.red},28,28,${d.alpha})`;
-                    for (let x = -20; x <= epW + 20; x += 7) {
-                        const y = d.base + Math.sin(x * d.freq + epTime * d.speed + d.phase) * d.amp;
-                        x === -20 ? epCtx.moveTo(x, y) : epCtx.lineTo(x, y);
-                    }
-                    epCtx.stroke();
-                }
-
-                epAnimId = requestAnimationFrame(drawEpWaves);
-            }
-
-            function startEpCanvas() {
-                if (epAnimId) cancelAnimationFrame(epAnimId);
-                state.epRunning = true;
-                epTime = 0;
-                resizeEpCanvas();
-                drawEpWaves();
-            }
-
-            function stopEpCanvas() {
-                state.epRunning = false;
-                if (epAnimId) {
-                    cancelAnimationFrame(epAnimId);
-                    epAnimId = null;
-                }
-                epCtx.clearRect(0, 0, epW, epH);
-            }
-
-            // ============================================================
-            // 7. AFK
-            // ============================================================
-            let afkTimerId = null;
-            let afkStartTime = 0;
-
-            function startAfkTimer() {
-                if (afkTimerId) clearInterval(afkTimerId);
-                afkStartTime = Date.now();
-                afkTimerId = setInterval(() => {
-                    const elapsed = Math.floor((Date.now() - afkStartTime) / 1000);
-                    const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
-                    const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
-                    const s = String(elapsed % 60).padStart(2, '0');
-                    afkTimerEl.textContent = `${h}:${m}:${s}`;
-                }, 200);
-            }
-
-            function stopAfkTimer() {
-                if (afkTimerId) {
-                    clearInterval(afkTimerId);
-                    afkTimerId = null;
-                }
-            }
-
-            function openAfk() {
-                if (state.isAfk) return;
-                if (state.isPlayerOpen) closePlayer();
-                if (state.isEpisodesOpen) closeEpisodes();
-
-                state.isAfk = true;
-                afkOverlay.classList.add('active');
-                startAfkCanvas();
-                startAfkTimer();
-                document.body.style.overflow = 'hidden';
-                afkBtn.textContent = '✕ إغلاق';
-                afkBtn.classList.add('active');
-            }
-
-            function closeAfk() {
-                if (!state.isAfk) return;
-                state.isAfk = false;
-                afkOverlay.classList.remove('active');
-                stopAfkCanvas();
-                stopAfkTimer();
-                document.body.style.overflow = 'auto';
-                afkBtn.textContent = '🌙 AFK';
-                afkBtn.classList.remove('active');
-            }
-
-            function toggleAfk() {
-                if (state.isAfk) {
-                    closeAfk();
-                } else {
-                    openAfk();
-                }
-            }
-
-            // ============================================================
-            // 8. EPISODE DISCOVERY - فحص سريع مع التوقف عند أول رابط مكسور
-            // ============================================================
-
-            function checkEpisodeImage(epNumber) {
-                return new Promise((resolve) => {
-                    const img = new Image();
-                    let resolved = false;
-
-                    img.onload = () => {
-                        if (!resolved) {
-                            resolved = true;
-                            resolve(true);
-                        }
-                    };
-
-                    img.onerror = () => {
-                        if (!resolved) {
-                            resolved = true;
-                            resolve(false);
-                        }
-                    };
-
-                    img.src = `${EPISODE_BASE_URL}${epNumber}.jpg?t=${Date.now()}`;
-
-                    setTimeout(() => {
-                        if (!resolved) {
-                            resolved = true;
-                            resolve(false);
-                        }
-                    }, 1000); // مهلة قصيرة جداً للفحص السريع
-                });
-            }
-
-            async function discoverEpisodes() {
-                if (state.isDiscovering || state.discovered) return;
-                state.isDiscovering = true;
-                state.discoveryError = null;
-
-                episodesList.innerHTML = `
-                    <div style="text-align:center;padding:40px 0;">
-                        <div class="loading-spinner"></div>
-                        <div class="loading-text">جاري اكتشاف الحلقات...</div>
-                        <div style="color:var(--text-muted);font-size:13px;margin-top:8px;" id="discoveryProgress">جاري فحص: 0</div>
+            let html = '';
+            for (let ep of pageItems) {
+                html += `
+                    <div class="episode-card" data-ep="${ep.num}">
+                        <div class="ep-num">${ep.num}</div>
+                        <div class="ep-status">متوفرة</div>
+                        <div class="play-icon">▶</div>
                     </div>
                 `;
-                episodesCount.textContent = 'جاري التحميل...';
-
-                const discovered = [];
-                let checked = 0;
-                const totalToCheck = KNOWN_EPISODES.length;
-
-                for (let i = 0; i < totalToCheck; i++) {
-                    const ep = KNOWN_EPISODES[i];
-                    const progressEl = document.getElementById('discoveryProgress');
-                    if (progressEl) progressEl.textContent = `جاري فحص: ${ep} (${i + 1}/${totalToCheck})`;
-
-                    try {
-                        const exists = await checkEpisodeImage(ep);
-                        if (!exists) {
-                            // أول رابط مكسور -> نوقف الفحص
-                            state.isDiscovering = false;
-                            if (discovered.length > 0) {
-                                discovered.sort((a, b) => a - b);
-                                state.availableEpisodes = discovered;
-                                state.totalEpisodes = discovered.length;
-                                state.discovered = true;
-                                state.discoveryError = null;
-                                episodesCount.textContent = `✅ تم العثور على ${state.totalEpisodes} حلقة (توقف عند ${ep})`;
-                                state.currentPage = 1;
-                                renderEpisodes();
-                            } else {
-                                // إذا لم يتم العثور على أي حلقة، نستخدم القائمة الكاملة كاحتياطي
-                                state.availableEpisodes = KNOWN_EPISODES;
-                                state.totalEpisodes = KNOWN_EPISODES.length;
-                                state.discovered = true;
-                                state.discoveryError = null;
-                                episodesCount.textContent = `✅ تم تحميل ${state.totalEpisodes} حلقة (مباشرة)`;
-                                state.currentPage = 1;
-                                renderEpisodes();
-                            }
-                            return;
-                        }
-                        discovered.push(ep);
-                    } catch (e) {
-                        // في حالة حدوث خطأ، نعتبره رابط مكسور ونوقف الفحص
-                        state.isDiscovering = false;
-                        if (discovered.length > 0) {
-                            discovered.sort((a, b) => a - b);
-                            state.availableEpisodes = discovered;
-                            state.totalEpisodes = discovered.length;
-                            state.discovered = true;
-                            state.discoveryError = null;
-                            episodesCount.textContent = `✅ تم العثور على ${state.totalEpisodes} حلقة (توقف عند ${ep})`;
-                            state.currentPage = 1;
-                            renderEpisodes();
-                        } else {
-                            state.availableEpisodes = KNOWN_EPISODES;
-                            state.totalEpisodes = KNOWN_EPISODES.length;
-                            state.discovered = true;
-                            state.discoveryError = null;
-                            episodesCount.textContent = `✅ تم تحميل ${state.totalEpisodes} حلقة (مباشرة)`;
-                            state.currentPage = 1;
-                            renderEpisodes();
-                        }
-                        return;
-                    }
-
-                    checked++;
-                }
-
-                state.isDiscovering = false;
-
-                if (discovered.length > 0) {
-                    discovered.sort((a, b) => a - b);
-                    state.availableEpisodes = discovered;
-                    state.totalEpisodes = discovered.length;
-                    state.discovered = true;
-                    state.discoveryError = null;
-                    episodesCount.textContent = `✅ تم العثور على ${state.totalEpisodes} حلقة`;
-                    state.currentPage = 1;
-                    renderEpisodes();
-                } else {
-                    state.availableEpisodes = KNOWN_EPISODES;
-                    state.totalEpisodes = KNOWN_EPISODES.length;
-                    state.discovered = true;
-                    state.discoveryError = null;
-                    episodesCount.textContent = `✅ تم تحميل ${state.totalEpisodes} حلقة (مباشرة)`;
-                    state.currentPage = 1;
-                    renderEpisodes();
-                }
             }
+            grid.innerHTML = html;
 
-            // ============================================================
-            // 9. EPISODE RENDER
-            // ============================================================
-            function renderEpisodes() {
-                if (state.totalEpisodes === 0) {
-                    episodesList.innerHTML =
-                        `<div style="text-align:center;padding:40px 0;color:var(--text-muted);">لا توجد حلقات متاحة</div>`;
-                    episodesPagination.innerHTML = '';
-                    return;
-                }
-
-                const totalPages = Math.ceil(state.totalEpisodes / state.itemsPerPage);
-                const start = (state.currentPage - 1) * state.itemsPerPage;
-                const end = Math.min(start + state.itemsPerPage, state.totalEpisodes);
-                const pageItems = state.availableEpisodes.slice(start, end);
-
-                if (pageItems.length === 0) {
-                    episodesList.innerHTML =
-                        `<div style="text-align:center;padding:40px 0;color:var(--text-muted);">لا توجد حلقات في هذه الصفحة</div>`;
-                } else {
-                    let html = '';
-                    for (let i = 0; i < pageItems.length; i++) {
-                        const ep = pageItems[i];
-                        html += `
-                            <div class="episode-item" data-ep="${ep}">
-                                <span class="ep-num">الحلقة ${ep}</span>
-                                <span class="ep-status">
-                                    متوفرة
-                                    <span class="play-icon">▶</span>
-                                </span>
-                            </div>
-                        `;
-                    }
-                    episodesList.innerHTML = html;
-
-                    document.querySelectorAll('.episode-item').forEach(el => {
-                        el.addEventListener('click', function() {
-                            const ep = parseInt(this.dataset.ep);
-                            openPlayer(ep);
-                        });
-                    });
-                }
-
-                renderPagination(totalPages);
-            }
-
-            function renderPagination(totalPages) {
-                // إزالة شريط التمرير (السلايدر) من الصفحات
-                if (totalPages <= 1) {
-                    episodesPagination.innerHTML = '';
-                    return;
-                }
-
-                const current = state.currentPage;
-                let html = '';
-
-                html += `<button onclick="window.changePage(${current - 1})" ${current <= 1 ? 'disabled' : ''}>‹ السابق</button>`;
-
-                // عرض الأزرار المدمجة بدون سلايدر
-                for (let i = 1; i <= totalPages; i++) {
-                    html +=
-                        `<button onclick="window.changePage(${i})" class="${i === current ? 'active' : ''}">${i}</button>`;
-                }
-
-                html += `<button onclick="window.changePage(${current + 1})" ${current >= totalPages ? 'disabled' : ''}>التالي ›</button>`;
-                html += `<span class="page-info">${current} / ${totalPages}</span>`;
-
-                episodesPagination.innerHTML = html;
-            }
-
-            function changePage(page) {
-                const totalPages = Math.ceil(state.totalEpisodes / state.itemsPerPage);
-                if (page < 1 || page > totalPages) return;
-                state.currentPage = page;
-                renderEpisodes();
-                const container = episodesList.parentElement;
-                if (container) container.scrollTop = 0;
-            }
-
-            window.changePage = changePage;
-
-            // ============================================================
-            // 10. EPISODES - OPEN / CLOSE
-            // ============================================================
-            function openEpisodes() {
-                if (state.isEpisodesOpen) return;
-                if (state.isPlayerOpen) closePlayer();
-                if (state.isAfk) closeAfk();
-
-                state.isEpisodesOpen = true;
-                episodesOverlay.classList.add('active');
-                startEpCanvas();
-                document.body.style.overflow = 'hidden';
-                epBtn.textContent = '✕ إغلاق';
-                epBtn.classList.add('active');
-
-                if (!state.discovered && !state.isDiscovering) {
-                    discoverEpisodes();
-                } else if (state.discovered && state.totalEpisodes > 0) {
-                    renderEpisodes();
-                }
-            }
-
-            function closeEpisodes() {
-                if (!state.isEpisodesOpen) return;
-                state.isEpisodesOpen = false;
-                episodesOverlay.classList.remove('active');
-                stopEpCanvas();
-                document.body.style.overflow = 'auto';
-                epBtn.textContent = '🎬 حلقات';
-                epBtn.classList.remove('active');
-                if (state.isPlayerOpen) closePlayer();
-            }
-
-            function toggleEpisodes() {
-                if (state.isEpisodesOpen) {
-                    closeEpisodes();
-                } else {
-                    openEpisodes();
-                }
-            }
-
-            // ============================================================
-            // 11. PLAYER
-            // ============================================================
-            function openPlayer(ep) {
-                if (state.isPlayerOpen) closePlayer();
-                state.isPlayerOpen = true;
-
-                const url = `${EPISODE_BASE_URL}${ep}.mp4?download=true`;
-                playerVideo.src = url;
-                playerInfo.textContent = `🎬 الحلقة ${ep}`;
-                playerError.classList.remove('show');
-                playerOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-
-                playerVideo.onerror = function() {
-                    playerError.classList.add('show');
-                    playerError.textContent = `❌ الحلقة ${ep} غير متوفرة أو الرابط مكسور`;
-                    playerInfo.textContent = `❌ الحلقة ${ep} - غير متوفرة`;
-                };
-
-                playerVideo.oncanplay = function() {
-                    playerError.classList.remove('show');
-                    playerInfo.textContent = `▶ الحلقة ${ep}`;
-                };
-
-                playerVideo.load();
-            }
-
-            function closePlayer() {
-                if (!state.isPlayerOpen) return;
-                state.isPlayerOpen = false;
-                playerOverlay.classList.remove('active');
-                playerVideo.pause();
-                playerVideo.src = '';
-                playerVideo.load();
-                document.body.style.overflow = state.isEpisodesOpen || state.isAfk ? 'hidden' : 'auto';
-                playerError.classList.remove('show');
-                playerInfo.textContent = 'جاري التحميل...';
-            }
-
-            // ============================================================
-            // 12. TYPING COUNTER
-            // ============================================================
-            let typingTimerId = null;
-
-            function calculateMistakes() {
-                const target = targetInput.value;
-                const typed = typingBox.value;
-                if (target.length === 0) return 0;
-                let errors = 0;
-                const len = Math.min(typed.length, target.length);
-                for (let i = 0; i < len; i++) {
-                    if (typed[i] !== target[i]) errors++;
-                }
-                errors += Math.abs(typed.length - target.length);
-                return errors;
-            }
-
-            function getElapsed() {
-                if (!state.running && state.startTime === 0) return 0;
-                return (performance.now() - state.startTime) / 1000;
-            }
-
-            function updateStats() {
-                const chars = typingBox.value.length;
-                const elapsed = getElapsed();
-                state.mistakes = calculateMistakes();
-
-                charsEl.textContent = chars;
-                mistakeText.textContent = state.mistakes;
-
-                if (state.running) {
-                    timeEl.textContent = elapsed.toFixed(1) + 's';
-                }
-
-                if (elapsed > 0 && chars > 0) {
-                    cpsEl.textContent = (chars / elapsed).toFixed(2);
-                } else {
-                    cpsEl.textContent = '0.00';
-                }
-
-                backspacesEl.textContent = state.backspaceCount;
-            }
-
-            function startTimer() {
-                if (state.running || typingBox.value.length === 0) return;
-                if (typingTimerId) {
-                    clearInterval(typingTimerId);
-                    typingTimerId = null;
-                }
-                state.running = true;
-                state.sessionStarted = true;
-                state.startTime = performance.now();
-                statusText.textContent = 'يكتب...';
-                statusDot.className = 'dot running';
-                typingTimerId = setInterval(updateStats, 120);
-                updateStats();
-            }
-
-            function stopTimer(addToHistory = true) {
-                if (!state.running) return;
-                updateStats();
-                state.running = false;
-                if (typingTimerId) {
-                    clearInterval(typingTimerId);
-                    typingTimerId = null;
-                }
-                statusText.textContent = 'متوقف';
-                statusDot.className = 'dot stopped';
-                if (addToHistory) addHistory();
-                updateStats();
-            }
-
-            function addHistory() {
-                const chars = typingBox.value.length;
-                const elapsed = getElapsed();
-                if (chars === 0 || elapsed <= 0.1) return;
-                const cps = chars / elapsed;
-                state.historyEntries.unshift({
-                    chars: chars,
-                    mistakes: state.mistakes,
-                    elapsed: elapsed,
-                    cps: cps,
-                    backspaces: state.backspaceCount,
-                    timestamp: new Date().toLocaleTimeString()
+            document.querySelectorAll('.episode-card').forEach(el => {
+                el.addEventListener('click', function() {
+                    const ep = parseInt(this.dataset.ep);
+                    openPlayer(ep);
                 });
-                renderHistory();
+            });
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            if (totalPages <= 1) {
+                paginationButtons.innerHTML = '';
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+            
+            const current = currentPage;
+            
+            let html = '';
+
+            // عرض أول 3 صفحات دائماً إذا كنا في البداية
+            if (current <= 3) {
+                for (let i = 1; i <= Math.min(3, totalPages); i++) {
+                    html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                }
+                if (totalPages > 4) {
+                    html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                    html += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+                }
+            } else if (current >= totalPages - 1) {
+                // في النهاية
+                html += `<button class="page-btn" onclick="changePage(1)">1</button>`;
+                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                for (let i = totalPages - 2; i <= totalPages; i++) {
+                    html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                }
+            } else {
+                // في المنتصف
+                html += `<button class="page-btn" onclick="changePage(1)">1</button>`;
+                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                for (let i = current - 1; i <= current + 1; i++) {
+                    html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                }
+                html += `<span style="color:#fff;padding:0 2px;">...</span>`;
+                html += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
             }
 
-            function renderHistory() {
-                if (state.historyEntries.length === 0) {
-                    historyList.innerHTML = '<div class="history-empty">لا توجد جولات مسجلة بعد</div>';
-                    historyCount.textContent = '0';
-                    return;
-                }
-                historyCount.textContent = state.historyEntries.length;
-                historyList.innerHTML = state.historyEntries.map(e => `
-                    <div class="history-item">
-                        <div class="left">
-                            <span class="stat-chars">${e.chars}</span>
-                            <span style="color:var(--text-muted);">حرف</span>
-                            <span class="stat-errors">${e.mistakes}</span>
-                            <span style="color:var(--text-muted);">خطأ</span>
-                            <span class="stat-bs">⌫ ${e.backspaces}</span>
-                        </div>
-                        <div class="right">
-                            <span class="stat-cps">${e.cps.toFixed(2)} ح/ث</span>
-                            <span class="stat-time">${e.elapsed.toFixed(1)}s</span>
-                            <span class="label-tag">${e.timestamp}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
+            paginationButtons.innerHTML = html;
 
-            function resetRound(clearTarget = true) {
-                if (typingTimerId) {
-                    clearInterval(typingTimerId);
-                    typingTimerId = null;
-                }
-                state.running = false;
-                state.sessionStarted = false;
-                state.startTime = 0;
-                state.backspaceCount = 0;
-                state.mistakes = 0;
-                typingBox.value = '';
-                if (clearTarget) targetInput.value = '';
-                charsEl.textContent = '0';
-                timeEl.textContent = '0.0s';
-                cpsEl.textContent = '0.00';
-                backspacesEl.textContent = '0';
-                mistakeText.textContent = '0';
-                statusText.textContent = 'جاهز';
-                statusDot.className = 'dot idle';
-                typingBox.focus();
-                typingBox.setSelectionRange(0, 0);
-            }
+            // تفعيل وتعطيل أزرار السابق والتالي
+            prevBtn.disabled = current <= 1;
+            nextBtn.disabled = current >= totalPages;
+        }
 
-            // ============================================================
-            // 13. EVENT LISTENERS
-            // ============================================================
+        // دالة تغيير الصفحة
+        window.changePage = function(page) {
+            const totalPages = Math.ceil(totalEpisodes / ITEMS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderEpisodes();
+            const container = document.getElementById('episodesContainer');
+            if (container) container.scrollTop = 0;
+        };
 
-            afkBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleAfk();
-            });
+        // إصلاح أزرار السابق والتالي
+        prevBtn.addEventListener('click', function() {
+            if (currentPage > 1) changePage(currentPage - 1);
+        });
 
-            epBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleEpisodes();
-            });
+        nextBtn.addEventListener('click', function() {
+            const totalPages = Math.ceil(totalEpisodes / ITEMS_PER_PAGE);
+            if (currentPage < totalPages) changePage(currentPage + 1);
+        });
 
-            episodesClose.addEventListener('click', closeEpisodes);
-
-            closePlayerBtn.addEventListener('click', closePlayer);
-
-            document.addEventListener('click', function(e) {
-                if (e.target === playerOverlay) {
-                    closePlayer();
-                }
-            });
-
-            // ============================================================
-            // 14. TYPING EVENTS
-            // ============================================================
-
-            typingBox.addEventListener('focus', function() {
-                this.setSelectionRange(this.value.length, this.value.length);
-            });
-
-            typingBox.addEventListener('input', function() {
-                if (!state.running && this.value.length > 0 && !state.sessionStarted) {
-                    startTimer();
-                }
-                updateStats();
-            });
-
-            typingBox.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace') {
-                    if (state.sessionStarted || state.running) {
-                        state.backspaceCount++;
-                        backspacesEl.textContent = state.backspaceCount;
-                    }
-                    return;
-                }
-
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (state.running) {
-                        stopTimer(true);
-                        setTimeout(() => resetRound(true), 150);
-                    }
-                }
-            });
-
-            targetInput.addEventListener('input', function() {
-                state.mistakes = calculateMistakes();
-                mistakeText.textContent = state.mistakes;
-            });
-
-            resetBtn.addEventListener('click', function() {
-                if (state.running) stopTimer(false);
-                resetRound(true);
-            });
-
-            clearLogsBtn.addEventListener('click', function() {
-                state.historyEntries = [];
-                renderHistory();
-            });
-
-            // ============================================================
-            // 15. KEYBOARD SHORTCUTS
-            // ============================================================
-
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.altKey && e.key === 'j') {
-                    e.preventDefault();
-                    toggleAfk();
-                    return;
-                }
-
-                if (e.ctrlKey && e.altKey && e.key === 'p') {
-                    e.preventDefault();
-                    toggleEpisodes();
-                    return;
-                }
-
-                if (e.key === 'Escape') {
-                    if (state.isPlayerOpen) {
-                        closePlayer();
-                        return;
-                    }
-                    if (state.isEpisodesOpen) {
-                        closeEpisodes();
-                        return;
-                    }
-                    if (state.isAfk) {
-                        closeAfk();
-                        return;
-                    }
-                }
-            });
-
-            // ============================================================
-            // 16. VISIBILITY CHANGE
-            // ============================================================
-
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    if (state.mainRunning && mainAnimId) {
-                        cancelAnimationFrame(mainAnimId);
-                        mainAnimId = null;
-                    }
+        // دالة القفز لرقم محدد (خانة الإدخال)
+        epInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = parseInt(this.value);
+                if (val >= 1 && val <= totalEpisodes) {
+                    const targetPage = Math.ceil(val / ITEMS_PER_PAGE);
+                    changePage(targetPage);
+                    this.value = ''; // مسح الحقل بعد القفز
+                    
+                    // البحث عن الحلقة داخل الصفحة وفتحها (اختياري)
+                    // إذا أردت فتح الحلقة فوراً عند الإدخال، أزل التعليق عن السطر التالي:
+                    // openPlayer(val);
                 } else {
-                    if (state.mainRunning && !mainAnimId) {
-                        drawMainWaves();
-                    }
+                    alert('الرجاء إدخال رقم صحيح بين 1 و ' + totalEpisodes);
                 }
-            });
-
-            // ============================================================
-            // 17. WINDOW RESIZE
-            // ============================================================
-
-            window.addEventListener('resize', function() {
-                if (state.mainRunning) resizeMainCanvas();
-                if (state.afkRunning) resizeAfkCanvas();
-                if (state.epRunning) resizeEpCanvas();
-            });
-
-            // ============================================================
-            // 18. INIT
-            // ============================================================
-
-            function init() {
-                startMainCanvas();
-
-                typingBox.focus();
-                typingBox.setSelectionRange(0, 0);
-
-                renderHistory();
-
-                // تحميل الحلقات فوراً
-                setTimeout(() => {
-                    if (!state.discovered && !state.isDiscovering) {
-                        discoverEpisodes();
-                    }
-                }, 300);
-
-                console.log('✅ التطبيق جاهز!');
-                console.log('🟢 CTRL+ALT+J = AFK');
-                console.log('🟢 CTRL+ALT+P = حلقات');
-                console.log('🟢 ESC = إغلاق الطبقة العلوية');
-                console.log(`📡 الرابط الأساسي: ${EPISODE_BASE_URL}`);
-                console.log(`📊 تم تحميل ${KNOWN_EPISODES.length} حلقة معروفة مسبقاً`);
             }
+        });
 
-            init();
+        // ============================================================
+        //  PLAYER
+        // ============================================================
+        function openPlayer(ep) {
+            const isAbove1073 = ep >= 1074;
+            const baseUrl = isAbove1073 ? BASE_URL_2 : BASE_URL_1;
+            const url = `${baseUrl}${ep}.mp4?download=true`;
 
-        })();
-    </script>
+            playerVideo.src = url;
+            playerInfo.textContent = `🎬 الحلقة ${ep}`;
+            playerError.classList.remove('show');
+            playerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            playerVideo.onerror = function() {
+                playerError.classList.add('show');
+                playerError.textContent = `❌ الحلقة ${ep} غير متوفرة  `;
+                playerInfo.textContent = `❌ الحلقة ${ep} - غير متوفرة`;
+            };
+
+            playerVideo.oncanplay = function() {
+                playerError.classList.remove('show');
+                playerInfo.textContent = `▶ الحلقة ${ep}`;
+            };
+
+            playerVideo.load();
+        }
+
+        function closePlayer() {
+            playerOverlay.classList.remove('active');
+            playerVideo.pause();
+            playerVideo.src = '';
+            playerVideo.load();
+            document.body.style.overflow = 'auto';
+            playerError.classList.remove('show');
+            playerInfo.textContent = 'جاري التحميل...';
+        }
+
+        closePlayerBtn.addEventListener('click', closePlayer);
+        playerOverlay.addEventListener('click', function(e) {
+            if (e.target === playerOverlay) closePlayer();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (playerOverlay.classList.contains('active')) closePlayer();
+            }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        loadEpisodes();
+
+    })();
+</script>
 </body>
 </html>
